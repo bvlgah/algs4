@@ -17,8 +17,8 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 
 /**
- *  <i>Binary standard output</i>. This class provides methods for converting
- *  primtive type variables ({@code boolean}, {@code byte}, {@code char},
+ *  The <code>BinaryStdOut</code> class provides static methods for converting
+ *  primitive type variables ({@code boolean}, {@code byte}, {@code char},
  *  {@code int}, {@code long}, {@code float}, and {@code double})
  *  to sequences of bits and writing them to standard output.
  *  Uses big-endian (most-significant byte first).
@@ -26,25 +26,35 @@ import java.io.IOException;
  *  The client must {@code flush()} the output stream when finished writing bits.
  *  <p>
  *  The client should not intermix calls to {@code BinaryStdOut} with calls
- *  to {@code StdOut} or {@code System.out}; otherwise unexpected behavior 
+ *  to {@code StdOut} or {@code System.out}; otherwise unexpected behavior
  *  will result.
  *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
 public final class BinaryStdOut {
-    private static BufferedOutputStream out = new BufferedOutputStream(System.out);
-
-    private static int buffer;     // 8-bit buffer of bits to write out
-    private static int n;          // number of bits remaining in buffer
+    private static BufferedOutputStream out;  // output stream (standard output)
+    private static int buffer;                // 8-bit buffer of bits to write
+    private static int n;                     // number of bits remaining in buffer
+    private static boolean isInitialized;     // has BinaryStdOut been called for first time?
 
     // don't instantiate
     private BinaryStdOut() { }
+
+    // initialize BinaryStdOut
+    private static void initialize() {
+        out = new BufferedOutputStream(System.out);
+        buffer = 0;
+        n = 0;
+        isInitialized = true;
+    }
 
    /**
      * Writes the specified bit to standard output.
      */
     private static void writeBit(boolean bit) {
+        if (!isInitialized) initialize();
+
         // add bit to buffer
         buffer <<= 1;
         if (bit) buffer |= 1;
@@ -52,12 +62,14 @@ public final class BinaryStdOut {
         // if buffer is full (8 bits), write out as a single byte
         n++;
         if (n == 8) clearBuffer();
-    } 
+    }
 
    /**
      * Writes the 8-bit byte to standard output.
      */
     private static void writeByte(int x) {
+        if (!isInitialized) initialize();
+
         assert x >= 0 && x < 256;
 
         // optimized if byte-aligned
@@ -80,6 +92,8 @@ public final class BinaryStdOut {
 
     // write out any remaining bits in buffer to standard output, padding with 0s
     private static void clearBuffer() {
+        if (!isInitialized) initialize();
+
         if (n == 0) return;
         if (n > 0) buffer <<= (8 - n);
         try {
@@ -114,6 +128,7 @@ public final class BinaryStdOut {
         flush();
         try {
             out.close();
+            isInitialized = false;
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -127,7 +142,7 @@ public final class BinaryStdOut {
      */
     public static void write(boolean x) {
         writeBit(x);
-    } 
+    }
 
    /**
      * Writes the 8-bit byte to standard output.
@@ -149,7 +164,7 @@ public final class BinaryStdOut {
     }
 
    /**
-     * Writes the r-bit int to standard output.
+     * Writes the <em>r</em>-bit int to standard output.
      * @param x the {@code int} to write.
      * @param r the number of relevant bits in the char.
      * @throws IllegalArgumentException if {@code r} is not between 1 and 32.
@@ -215,7 +230,7 @@ public final class BinaryStdOut {
    /**
      * Writes the 8-bit char to standard output.
      * @param x the {@code char} to write.
-     * @throws IllegalArgumentException if {@code x} is not betwen 0 and 255.
+     * @throws IllegalArgumentException if {@code x} is not between 0 and 255.
      */
     public static void write(char x) {
         if (x < 0 || x >= 256) throw new IllegalArgumentException("Illegal 8-bit char = " + x);
@@ -223,7 +238,7 @@ public final class BinaryStdOut {
     }
 
    /**
-     * Writes the r-bit char to standard output.
+     * Writes the <em>r</em>-bit char to standard output.
      * @param x the {@code char} to write.
      * @param r the number of relevant bits in the char.
      * @throws IllegalArgumentException if {@code r} is not between 1 and 16.
@@ -254,9 +269,9 @@ public final class BinaryStdOut {
     }
 
    /**
-     * Writes the string of r-bit characters to standard output.
+     * Writes the string of <em>r</em>-bit characters to standard output.
      * @param s the {@code String} to write.
-     * @param r the number of relevants bits in each character.
+     * @param r the number of relevant bits in each character.
      * @throws IllegalArgumentException if r is not between 1 and 16.
      * @throws IllegalArgumentException if any character in the string is not
      * between 0 and 2<sup>r</sup> - 1.
@@ -284,7 +299,7 @@ public final class BinaryStdOut {
 }
 
 /******************************************************************************
- *  Copyright 2002-2016, Robert Sedgewick and Kevin Wayne.
+ *  Copyright 2002-2022, Robert Sedgewick and Kevin Wayne.
  *
  *  This file is part of algs4.jar, which accompanies the textbook
  *

@@ -19,8 +19,8 @@ import java.net.Socket;
 import java.util.Locale;
 
 /**
- *  This class provides methods for writing strings and numbers to
- *  various output streams, including standard output, file, and sockets.
+ *  The <code>Out</code> data type provides methods for writing strings and
+ *  numbers to various output streams, including standard output, file, and sockets.
  *  <p>
  *  For additional documentation, see
  *  <a href="https://introcs.cs.princeton.edu/31datatype">Section 3.1</a> of
@@ -193,7 +193,7 @@ public class Out {
 
    /**
      * Prints an object to this output stream and flushes this output stream.
-     * 
+     *
      * @param x the object to print
      */
     public void print(Object x) {
@@ -203,7 +203,7 @@ public class Out {
 
    /**
      * Prints a boolean to this output stream and flushes this output stream.
-     * 
+     *
      * @param x the boolean to print
      */
     public void print(boolean x) {
@@ -213,7 +213,7 @@ public class Out {
 
    /**
      * Prints a character to this output stream and flushes this output stream.
-     * 
+     *
      * @param x the character to print
      */
     public void print(char x) {
@@ -223,7 +223,7 @@ public class Out {
 
    /**
      * Prints a double to this output stream and flushes this output stream.
-     * 
+     *
      * @param x the double to print
      */
     public void print(double x) {
@@ -233,7 +233,7 @@ public class Out {
 
    /**
      * Prints a float to this output stream and flushes this output stream.
-     * 
+     *
      * @param x the float to print
      */
     public void print(float x) {
@@ -243,7 +243,7 @@ public class Out {
 
    /**
      * Prints an integer to this output stream and flushes this output stream.
-     * 
+     *
      * @param x the integer to print
      */
     public void print(int x) {
@@ -253,7 +253,7 @@ public class Out {
 
    /**
      * Prints a long integer to this output stream and flushes this output stream.
-     * 
+     *
      * @param x the long integer to print
      */
     public void print(long x) {
@@ -263,7 +263,7 @@ public class Out {
 
    /**
      * Prints a byte to this output stream and flushes this output stream.
-     * 
+     *
      * @param x the byte to print
      */
     public void print(byte x) {
@@ -319,7 +319,7 @@ public class Out {
 }
 
 /******************************************************************************
- *  Copyright 2002-2016, Robert Sedgewick and Kevin Wayne.
+ *  Copyright 2002-2022, Robert Sedgewick and Kevin Wayne.
  *
  *  This file is part of algs4.jar, which accompanies the textbook
  *

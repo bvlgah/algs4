@@ -18,6 +18,20 @@ package edu.princeton.cs.algs4;
  *  the time that elapses between the start and end of a
  *  programming task (wall-clock time).
  *
+ *  To measure the running time of a code fragment, construct a
+ *  <code>Stopwatch</code> object, execute the code you want to time,
+ *  and then call the <code>elapsedTime()</code> method to get the
+ *  elapsed time in seconds.
+ *  <pre>
+ *
+ *   Stopwatch stopwatch = new Stopwatch();
+ *
+ *   // do some computationally intensive calculation here
+ *
+ *   double time = stopwatch.elapsedTime();
+ *  </pre>
+ *  <p>
+ *
  *  See {@link StopwatchCPU} for a version that measures CPU time.
  *  For additional documentation,
  *  see <a href="https://algs4.cs.princeton.edu/14analysis">Section 1.4</a> of
@@ -28,7 +42,7 @@ package edu.princeton.cs.algs4;
  */
 
 
-public class Stopwatch { 
+public class Stopwatch {
 
     private final long start;
 
@@ -37,7 +51,7 @@ public class Stopwatch {
      */
     public Stopwatch() {
         start = System.currentTimeMillis();
-    } 
+    }
 
 
     /**
@@ -50,10 +64,10 @@ public class Stopwatch {
         return (now - start) / 1000.0;
     }
 
-    
+
     /**
      * Unit tests the {@code Stopwatch} data type.
-     * Takes a command-line argument {@code n} and computes the 
+     * Takes a command-line argument {@code n} and computes the
      * sum of the square roots of the first {@code n} positive integers,
      * first using {@code Math.sqrt()}, then using {@code Math.pow()}.
      * It prints to standard output the sum and the amount of time to
@@ -83,10 +97,10 @@ public class Stopwatch {
         double time2 = timer2.elapsedTime();
         StdOut.printf("%e (%.2f seconds)\n", sum2, time2);
     }
-} 
+}
 
 /******************************************************************************
- *  Copyright 2002-2016, Robert Sedgewick and Kevin Wayne.
+ *  Copyright 2002-2022, Robert Sedgewick and Kevin Wayne.
  *
  *  This file is part of algs4.jar, which accompanies the textbook
  *

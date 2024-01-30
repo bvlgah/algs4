@@ -1,8 +1,8 @@
 /******************************************************************************
  *  Compilation:  javac BinaryStdIn.java
  *  Execution:    java BinaryStdIn < input > output
- *  Dependencies: none             
- *  
+ *  Dependencies: none
+ *
  *  Supports reading binary data from standard input.
  *
  *  % java BinaryStdIn < input.jpg > output.jpg
@@ -17,14 +17,15 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 
 /**
- *  <i>Binary standard input</i>. This class provides methods for reading
- *  in bits from standard input, either one bit at a time (as a {@code boolean}),
+ *  The <code>BinaryStdIn</code> class provides static methods for reading
+ *  in bits from standard input. It can process the bits
+ *  one bit at a time (as a {@code boolean}),
  *  8 bits at a time (as a {@code byte} or {@code char}),
  *  16 bits at a time (as a {@code short}), 32 bits at a time
  *  (as an {@code int} or {@code float}), or 64 bits at a time (as a
  *  {@code double} or {@code long}).
  *  <p>
- *  All primitive types are assumed to be represented using their 
+ *  All primitive types are assumed to be represented using their
  *  standard Java representations, in big-endian (most significant
  *  byte first) order.
  *  <p>
@@ -36,19 +37,24 @@ import java.util.NoSuchElementException;
  *  @author Kevin Wayne
  */
 public final class BinaryStdIn {
-    private static BufferedInputStream in = new BufferedInputStream(System.in);
-    private static final int EOF = -1;    // end of file
+    private static final int EOF = -1;      // end of file
 
-    private static int buffer;            // one character buffer
-    private static int n;                 // number of bits left in buffer
-
-    // static initializer
-    static {
-        fillBuffer();
-    }
+    private static BufferedInputStream in;  // input stream
+    private static int buffer;              // one character buffer
+    private static int n;                   // number of bits left in buffer
+    private static boolean isInitialized;   // has BinaryStdIn been called for first time?
 
     // don't instantiate
     private BinaryStdIn() { }
+
+    // fill buffer
+    private static void initialize() {
+        in = new BufferedInputStream(System.in);
+        buffer = 0;
+        n = 0;
+        fillBuffer();
+        isInitialized = true;
+    }
 
     private static void fillBuffer() {
         try {
@@ -66,8 +72,10 @@ public final class BinaryStdIn {
      * Close this input stream and release any associated system resources.
      */
     public static void close() {
+        if (!isInitialized) initialize();
         try {
             in.close();
+            isInitialized = false;
         }
         catch (IOException ioe) {
             throw new IllegalStateException("Could not close BinaryStdIn", ioe);
@@ -79,6 +87,7 @@ public final class BinaryStdIn {
      * @return true if and only if standard input is empty
      */
     public static boolean isEmpty() {
+        if (!isInitialized) initialize();
         return buffer == EOF;
     }
 
@@ -128,7 +137,7 @@ public final class BinaryStdIn {
     }
 
    /**
-     * Reads the next r bits from standard input and return as an r-bit character.
+     * Reads the next <em>r</em> bits from standard input and return as an <em>r</em>-bit character.
      *
      * @param  r number of bits to read.
      * @return the next r bits of data from standard input as a {@code char}
@@ -151,7 +160,7 @@ public final class BinaryStdIn {
     }
 
    /**
-     * Reads the remaining bytes of data from standard input and return as a string. 
+     * Reads the remaining bytes of data from standard input and return as a string.
      *
      * @return the remaining bytes of data from standard input as a {@code String}
      * @throws NoSuchElementException if standard input is empty or if the number of bits
@@ -202,7 +211,7 @@ public final class BinaryStdIn {
     }
 
    /**
-     * Reads the next r bits from standard input and return as an r-bit int.
+     * Reads the next <em>r</em> bits from standard input and return as an <em>r</em>-bit int.
      *
      * @param  r number of bits to read.
      * @return the next r bits of data from standard input as a {@code int}
@@ -272,7 +281,7 @@ public final class BinaryStdIn {
         char c = readChar();
         return (byte) (c & 0xff);
     }
-    
+
    /**
      * Test client. Reads in a binary input file from standard input and writes
      * it to standard output.
@@ -291,7 +300,7 @@ public final class BinaryStdIn {
 }
 
 /******************************************************************************
- *  Copyright 2002-2016, Robert Sedgewick and Kevin Wayne.
+ *  Copyright 2002-2022, Robert Sedgewick and Kevin Wayne.
  *
  *  This file is part of algs4.jar, which accompanies the textbook
  *
